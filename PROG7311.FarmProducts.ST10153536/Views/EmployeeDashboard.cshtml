@@ -1,0 +1,42 @@
+﻿@using PROG7311.FarmProducts.ST10153536.Models.Domain;
+@model List<ApplicationUser>
+
+@{
+    ViewData["Title"] = "Employee Dashboard";
+    var isEmployee = User.IsInRole("Employee");
+}
+
+<h1>Employee Dashboard</h1>
+
+@if (!isEmployee)
+{
+    <p>You are not authorized to view this page.</p>
+}
+else if (Model.Count == 0)
+{
+    <p>No farmers found.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Farmers</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var farmer in Model)
+            {
+                <tr>
+                    <td>@farmer.FirstName @farmer.LastName</td>
+                    <td>
+                        <a href="@Url.Action("ViewProducts", "Employee", new { id = farmer.Id })">View Products</a> |
+                        <a href="@Url.Action("AddFarmerRole", "Employee", new { id = farmer.Id })">Add Farmer Role</a> |
+                        <a href="@Url.Action("RemoveFarmerRole", "Employee", new { id = farmer.Id })">Remove Farmer Role</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,99 @@
+﻿@using PROG7311.FarmProducts.ST10153536.Models.Domain
+@model List<ApplicationUser>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    var adminName = UserManager.GetUserName(User);
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        /* Add your custom styles here */
+    </style>
+</head>
+<body>
+    <h1>Welcome Back, Admin!</h1>
+
+    <h2>Hello, @adminName!</h2>
+
+    <nav>
+        <ul>
+            <li><a href="@Url.Action("EmployeeDashboard", "Home")">Employee Dashboard</a></li>
+            <li><a href="@Url.Action("FarmerDashboard", "Home")">Farmer Dashboard</a></li>
+            <li><a href="@Url.Action("Index", "Product")">Products</a></li>
+        </ul>
+    </nav>
+
+    <table>
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.Email</td>
+                    <td>
+                        @foreach (var role in await UserManager.GetRolesAsync(user))
+                        {
+                            <span>@role</span>
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("DeleteUser", "Admin", new { id = user.Id })">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <hr />
+
+    <h2>Create User</h2>
+
+    @using (Html.BeginForm("CreateUser", "Admin"))
+    {
+        <div>
+            <label for="FirstName">First Name:</label>
+            <input type="text" name="FirstName" id="FirstName" required>
+        </div>
+        <div>
+            <label for="LastName">Last Name:</label>
+            <input type="text" name="LastName" id="LastName" required>
+        </div>
+        <div>
+            <label for="Email">Email:</label>
+            <input type="email" name="Email" id="Email" required>
+        </div>
+        <div>
+            <label for="Password">Password:</label>
+            <input type="password" name="Password" id="Password" required>
+        </div>
+        <div>
+            <label for="Roles">Roles:</label>
+            <select name="Roles" id="Roles" multiple>
+                <option value="Farmer">Farmer</option>
+                <option value="Employee">Employee</option>
+            </select>
+        </div>
+        <div>
+            <input type="submit" value="Create User">
+        </div>
+    }
+
+</body>
+</html>

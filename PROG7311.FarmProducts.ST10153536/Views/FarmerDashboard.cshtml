@@ -1,0 +1,62 @@
+﻿@model List<Product>
+
+@{
+    ViewData["Title"] = "Farmer Dashboard";
+}
+
+<h1>Farmer Dashboard</h1>
+
+<p>Welcome, @User.Identity.Name!</p>
+
+<h2>My Products</h2>
+
+@if (Model.Count > 0)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>@product.Type</td>
+                    <td>
+                        <form method="post" action="@Url.Action("DeleteProduct", "Farmer")">
+                            <input type="hidden" name="productId" value="@product.Id" />
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No products found.</p>
+}
+
+<hr />
+
+<h2>Add Product</h2>
+
+@using (Html.BeginForm("AddProduct", "Farmer"))
+{
+    <div>
+        <label for="Name">Name:</label>
+        <input type="text" name="Name" id="Name" required>
+    </div>
+    <div>
+        <label for="Type">Type:</label>
+        <input type="text" name="Type" id="Type" required>
+    </div>
+    <div>
+        <input type="submit" value="Add Product">
+    </div>
+}

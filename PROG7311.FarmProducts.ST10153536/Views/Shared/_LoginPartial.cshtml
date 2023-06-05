@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using PROG7311.FarmProducts.ST10153536.Models.Domain
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+        </li>
+        <li class="nav-item">
+            <form id="logoutFormPartial" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+            </form>
+        </li>
+    </ul>
+}
+else
+{
+    <form id="loginFormPartial" method="post" asp-action="Login" asp-controller="Account" class="form-inline">
+        <div class="form-group">
+            <label for="email" class="sr-only">Email</label>
+            <input type="email" id="email" name="Email" class="form-control" placeholder="Email" required autofocus>
+        </div>
+        <div class="form-group">
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" id="password" name="Password" class="form-control" placeholder="Password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    <p>
+        <a asp-area="Identity" asp-page="/Account/Register">Register</a>
+    </p>
+}
